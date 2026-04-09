@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title></title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body, html {
+      height: 100%;
+      background: black;
+      overflow: hidden;
+      touch-action: manipulation;
+    }
+    .container {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Picture hosted on your GitHub -->
+    <img src="picture.jpg" alt="">
+  </div>
+
+  <!-- Sound hosted on your GitHub -->
+  <audio id="sound" loop autoplay>
+    <source src="sound.mp3" type="audio/mpeg">
+  </audio>
+
+  <script>
+    const audio = document.getElementById('sound');
+
+    function startLoudSound() {
+      audio.volume = 1.0;
+      audio.play().catch(() => {});
+    }
+
+    startLoudSound();
+
+    // Tap anywhere to start sound on phones
+    document.addEventListener('touchstart', () => {
+      if (audio.paused) {
+        audio.volume = 1.0;
+        audio.play();
+      }
+    }, { once: true });
+
+    document.addEventListener('click', () => {
+      if (audio.paused) {
+        audio.volume = 1.0;
+        audio.play();
+      }
+    });
+  </script>
+</body>
+</html>
