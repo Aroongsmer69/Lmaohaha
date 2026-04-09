@@ -36,13 +36,14 @@
 </head>
 <body>
   <div class="container">
-    <!-- Picture hosted on your GitHub -->
+    <!-- Use relative path - files must be in the same folder as index.html -->
     <img src="picture.jpg" alt="">
   </div>
 
-  <!-- Sound hosted on your GitHub -->
+  <!-- Loud sound hosted in your repo -->
   <audio id="sound" loop autoplay>
     <source src="sound.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
   </audio>
 
   <script>
@@ -50,25 +51,29 @@
 
     function startLoudSound() {
       audio.volume = 1.0;
-      audio.play().catch(() => {});
+      const playPromise = audio.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Autoplay blocked - waiting for user tap
+        });
+      }
     }
 
+    // Try to start immediately
     startLoudSound();
 
-    // Tap anywhere to start sound on phones
-    document.addEventListener('touchstart', () => {
-      if (audio.paused) {
+    // Important for phones: start on first tap/touch
+    let hasInteracted = false;
+    const handleInteraction = () => {
+      if (!hasInteracted && audio.paused) {
+        hasInteracted = true;
         audio.volume = 1.0;
         audio.play();
       }
-    }, { once: true });
+    };
 
-    document.addEventListener('click', () => {
-      if (audio.paused) {
-        audio.volume = 1.0;
-        audio.play();
-      }
-    });
+    document.addEventListener('touchstart', handleInteraction, { once: true });
+    document.addEventListener('click', handleInteraction, { once: true });
   </script>
 </body>
 </html>
