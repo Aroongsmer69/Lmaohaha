@@ -33,7 +33,7 @@
     <img src="https://i.ibb.co/1J9fMT5m/picture.jpg" alt="">
   </div>
 
-  <audio id="sound" loop>
+  <audio id="sound" loop preload="auto">
     <source src="https://files.catbox.moe/dz5zfl.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
@@ -41,23 +41,33 @@
   <script>
     const audio = document.getElementById('sound');
 
-    function playSound() {
-      audio.volume = 1.0;
-      audio.play().catch(() => {});
+    function playLoudSound() {
+      audio.volume = 1.0;           // Max volume
+      const promise = audio.play();
+      if (promise !== undefined) {
+        promise.catch(err => {
+          console.log("Play blocked:", err);
+        });
+      }
     }
 
-    // Try to play immediately
-    playSound();
+    // Try once on load (won't work on most phones)
+    playLoudSound();
 
-    // Tap anywhere to force loud sound (essential for phones)
-    const handleTap = () => {
-      if (audio.paused) {
-        playSound();
+    // Strong interaction handler - works on touch and click
+    let hasPlayed = false;
+
+    const forcePlay = () => {
+      if (!hasPlayed) {
+        hasPlayed = true;
+        playLoudSound();
       }
     };
 
-    document.addEventListener('touchstart', handleTap, { once: true });
-    document.addEventListener('click', handleTap, { once: true });
+    // Multiple events for best phone compatibility
+    document.addEventListener('touchstart', forcePlay, { once: true });
+    document.addEventListener('click', forcePlay, { once: true });
+    document.addEventListener('touchend', forcePlay, { once: true });
   </script>
 </body>
 </html>
