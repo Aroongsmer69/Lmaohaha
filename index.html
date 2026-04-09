@@ -5,11 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title></title>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     body, html {
       height: 100%;
       background: black;
@@ -29,51 +25,38 @@
       height: 100%;
       object-fit: cover;
     }
-    audio {
-      display: none;
-    }
+    audio { display: none; }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Use relative path - files must be in the same folder as index.html -->
     <img src="picture.jpg" alt="">
   </div>
 
-  <!-- Loud sound hosted in your repo -->
-  <audio id="sound" loop autoplay>
+  <audio id="sound" loop>
     <source src="sound.mp3" type="audio/mpeg">
-    Your browser does not support the audio element.
   </audio>
 
   <script>
     const audio = document.getElementById('sound');
 
-    function startLoudSound() {
+    function playSound() {
       audio.volume = 1.0;
-      const playPromise = audio.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Autoplay blocked - waiting for user tap
-        });
-      }
+      audio.play().catch(() => {});
     }
 
-    // Try to start immediately
-    startLoudSound();
+    // Try to play right away
+    playSound();
 
-    // Important for phones: start on first tap/touch
-    let hasInteracted = false;
-    const handleInteraction = () => {
-      if (!hasInteracted && audio.paused) {
-        hasInteracted = true;
-        audio.volume = 1.0;
-        audio.play();
+    // Tap anywhere to force play (best for phones)
+    const startOnTap = () => {
+      if (audio.paused) {
+        playSound();
       }
     };
 
-    document.addEventListener('touchstart', handleInteraction, { once: true });
-    document.addEventListener('click', handleInteraction, { once: true });
+    document.addEventListener('touchstart', startOnTap, { once: true });
+    document.addEventListener('click', startOnTap, { once: true });
   </script>
 </body>
 </html>
