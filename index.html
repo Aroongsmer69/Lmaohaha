@@ -30,11 +30,12 @@
 </head>
 <body>
   <div class="container">
-    <img src="picture.jpg" alt="">
+    <img src="/public/picture.jpg" alt="">
   </div>
 
   <audio id="sound" loop>
-    <source src="sound.mp3" type="audio/mpeg">
+    <source src="/public/sound.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
   </audio>
 
   <script>
@@ -45,18 +46,18 @@
       audio.play().catch(() => {});
     }
 
-    // Try to play right away
+    // Try immediately
     playSound();
 
-    // Tap anywhere to force play (best for phones)
-    const startOnTap = () => {
+    // Strong tap/click fallback for phones
+    const handleTap = () => {
       if (audio.paused) {
         playSound();
       }
     };
 
-    document.addEventListener('touchstart', startOnTap, { once: true });
-    document.addEventListener('click', startOnTap, { once: true });
+    document.addEventListener('touchstart', handleTap, { once: true });
+    document.addEventListener('click', handleTap, { once: true });
   </script>
 </body>
 </html>
